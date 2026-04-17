@@ -1,0 +1,40 @@
+# PagePocket — Privacy Policy
+
+**Last updated: April 2026**
+
+## Overview
+
+PagePocket is a Chrome extension that captures the current page and saves it as a PDF, PNG or JPEG. This policy explains how the extension handles your data.
+
+## Data collection
+
+PagePocket does **not** collect, store, transmit or share any personal data with third parties.
+
+## How it works
+
+- When you click Capture, PagePocket captures the visible content of the active tab using html2canvas
+- The captured content is converted to your chosen format (PDF, PNG or JPEG) entirely within your browser
+- The file is saved directly to your device via the browser's download system
+- No page content, screenshots or files are ever sent to any external server
+
+## Permissions
+
+| Permission | Reason |
+|---|---|
+| `activeTab` | To access the current tab's content for capture |
+| `scripting` | To inject the capture script into the active page |
+| `downloads` | To save the captured file to your device |
+| `host_permissions: <all_urls>` | Required to capture pages on any domain |
+
+## Third party libraries
+
+PagePocket uses the following open source libraries, which run entirely in your browser:
+
+- **html2canvas** — renders the page to a canvas element
+- **jsPDF** — converts canvas output to PDF format
+
+Neither library transmits any data externally.
+
+## Contact
+
+PagePocket is a tool built by the IT team at the Ellen MacArthur Foundation. For questions contact [it@ellenmacarthurfoundation.org](mailto:it@ellenmacarthurfoundation.org).
