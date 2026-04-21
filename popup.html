@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PagePocket</title>
+  <style>
+    :root {
+      --bg:           #FFFFFF;
+      --surface:      #F8F8F8;
+      --border:       #F0F0F0;
+      --text:         #1A1A1A;
+      --text2:        #555555;
+      --text3:        #AAAAAA;
+      --green:        #2E9E6B;
+      --green-light:  #E8F5EF;
+      --green-text:   #1A6B47;
+      --red:          #E05555;
+      --blue:         #378ADD;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 300px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13px;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: var(--green-light);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .brand-sub  { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+    /* ── Options ── */
+    .options {
+      padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .option-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .option-label {
+      font-size: 12px; font-weight: 600; color: var(--text2);
+    }
+
+    .option-sub {
+      font-size: 11px; color: var(--text3); margin-top: 1px;
+    }
+
+    .pill-group { display: flex; gap: 5px; }
+
+    .pill {
+      padding: 4px 11px; border-radius: 12px;
+      font-size: 11px; font-weight: 600;
+      border: 1.5px solid var(--border);
+      color: var(--text3); background: transparent;
+      cursor: pointer; transition: all 0.12s;
+    }
+    .pill:hover { border-color: var(--green); color: var(--green); }
+    .pill.active {
+      background: var(--green-light);
+      border-color: var(--green);
+      color: var(--green-text);
+    }
+
+    /* ── Capture button ── */
+    .capture-wrap { padding: 14px 16px; }
+
+    #captureBtn {
+      width: 100%; padding: 11px;
+      background: var(--green); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.15s;
+    }
+    #captureBtn:hover    { background: #237A52; }
+    #captureBtn:disabled { background: #A8D5BF; cursor: not-allowed; }
+    #captureBtn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    /* ── Progress ── */
+    .progress-wrap {
+      margin-top: 10px; display: none; flex-direction: column; gap: 6px;
+    }
+    .progress-wrap.visible { display: flex; }
+
+    .progress-bg {
+      height: 3px; background: var(--border); border-radius: 3px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--green); border-radius: 3px;
+      transition: width 0.3s ease; width: 0%;
+    }
+
+    #progressLabel {
+      font-size: 11px; color: var(--text3); text-align: center;
+    }
+
+    /* ── Status ── */
+    #status {
+      font-size: 11px; text-align: center;
+      min-height: 16px; color: var(--text3);
+      margin-top: 8px;
+    }
+    #status.success { color: var(--green); font-weight: 600; }
+    #status.error   { color: var(--red);   font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <svg width="22" height="22" viewBox="0 0 52 52" fill="none" stroke="#2E9E6B" stroke-width="5" stroke-linecap="round">
+        <path d="M8 18V10h8"/>
+        <path d="M36 10h8v8"/>
+        <path d="M44 34v8h-8"/>
+        <path d="M16 44H8v-8"/>
+        <circle cx="26" cy="26" r="8" fill="#2E9E6B" stroke="none"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">PagePocket</div>
+      <div class="brand-sub">Capture &amp; save any page</div>
+    </div>
+  </header>
+
+  <div class="options">
+    <div class="option-row">
+      <div>
+        <div class="option-label">Format</div>
+      </div>
+      <div class="pill-group" id="formatGroup">
+        <button class="pill active" data-value="pdf">PDF</button>
+        <button class="pill" data-value="png">PNG</button>
+        <button class="pill" data-value="jpeg">JPEG</button>
+      </div>
+    </div>
+
+    <div class="option-row">
+      <div>
+        <div class="option-label">Method</div>
+        <div class="option-sub" id="methodHint">Scroll &amp; stitch</div>
+      </div>
+      <div class="pill-group" id="methodGroup">
+        <button class="pill" data-value="dom" data-hint="DOM render">DOM</button>
+        <button class="pill active" data-value="scroll" data-hint="Scroll &amp; stitch">Scroll</button>
+      </div>
+    </div>
+
+    <div class="option-row">
+      <div>
+        <div class="option-label">Quality</div>
+        <div class="option-sub" id="qualityHint">Affects file size</div>
+      </div>
+      <div class="pill-group" id="qualityGroup">
+        <button class="pill" data-value="0.6">Low</button>
+        <button class="pill active" data-value="0.85">Med</button>
+        <button class="pill" data-value="0.95">High</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="capture-wrap">
+    <button id="captureBtn">
+      <svg viewBox="0 0 52 52" fill="none" stroke="white" stroke-width="5" stroke-linecap="round">
+        <path d="M8 18V10h8"/>
+        <path d="M36 10h8v8"/>
+        <path d="M44 34v8h-8"/>
+        <path d="M16 44H8v-8"/>
+        <circle cx="26" cy="26" r="8" fill="white" stroke="none"/>
+      </svg>
+      Save Page
+    </button>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bg">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+      <div id="progressLabel">Starting…</div>
+    </div>
+
+    <div id="status"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
