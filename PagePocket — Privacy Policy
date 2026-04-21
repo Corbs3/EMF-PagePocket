@@ -1,40 +1,39 @@
-# PagePocket — Privacy Policy
+# Privacy Policy — PagePocket
 
 **Last updated: April 2026**
 
 ## Overview
 
-PagePocket is a Chrome extension that captures the current page and saves it as a PDF, PNG or JPEG. This policy explains how the extension handles your data.
+PagePocket is a Chrome extension that captures web pages and saves them as PDF, PNG, or JPEG files. This policy explains how the extension handles your data.
 
-## Data collection
+## Data Collected
 
-PagePocket does **not** collect, store, transmit or share any personal data with third parties.
+PagePocket does not collect, store, or transmit any personal data.
 
-## How it works
+The extension captures the visible content of the current tab and saves it directly to your downloads folder. No page content, screenshots, or files are stored by the extension or sent anywhere.
 
-- When you click Capture, PagePocket captures the visible content of the active tab using html2canvas
-- The captured content is converted to your chosen format (PDF, PNG or JPEG) entirely within your browser
-- The file is saved directly to your device via the browser's download system
-- No page content, screenshots or files are ever sent to any external server
+## Data Storage
+
+PagePocket does not use any browser storage APIs. No data persists between sessions.
+
+## Data Sharing
+
+No data is collected, transmitted, or shared with any external server, service, or third party.
+
+All processing happens locally in your browser using bundled open-source libraries (html2canvas and jsPDF).
 
 ## Permissions
 
-| Permission | Reason |
-|---|---|
-| `activeTab` | To access the current tab's content for capture |
-| `scripting` | To inject the capture script into the active page |
-| `downloads` | To save the captured file to your device |
-| `host_permissions: <all_urls>` | Required to capture pages on any domain |
+- **activeTab** - grants temporary access to the current tab when you click the capture button
+- **scripting** - used to inject the html2canvas library into the page to render its content
+- **downloads** - used to save the output file to your downloads folder
+- **tabs** - used to read tab information and take screenshots during scroll & stitch capture
+- **host_permissions (`<all_urls>`)** - required to inject scripts and capture pages on any site
 
-## Third party libraries
+## Changes to This Policy
 
-PagePocket uses the following open source libraries, which run entirely in your browser:
-
-- **html2canvas** — renders the page to a canvas element
-- **jsPDF** — converts canvas output to PDF format
-
-Neither library transmits any data externally.
+This policy may be updated occasionally. The latest version will always be available at this URL.
 
 ## Contact
 
-PagePocket is a tool built by the IT team at the Ellen MacArthur Foundation. For questions contact [it@ellenmacarthurfoundation.org](mailto:it@ellenmacarthurfoundation.org).
+For questions about this extension, open an issue on the GitHub repository.
