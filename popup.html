@@ -2,205 +2,184 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PagePocket</title>
   <style>
     :root {
-      --bg:           #FFFFFF;
-      --surface:      #F8F8F8;
-      --border:       #F0F0F0;
-      --text:         #1A1A1A;
-      --text2:        #555555;
-      --text3:        #AAAAAA;
-      --green:        #2E9E6B;
-      --green-light:  #E8F5EF;
-      --green-text:   #1A6B47;
-      --red:          #E05555;
-      --blue:         #378ADD;
+      --bg:#FFFFFF; --surface:#F6F8F7; --line:#E9EEEB;
+      --ink:#16241D; --ink2:#4F5E57; --ink3:#8A9891;
+      --green:#2E9E6B; --green-d:#237A52; --link:#2E9E6B;
+      --mint:#E8F5EF; --mint-ink:#1A6B47; --chip:rgba(255,255,255,.6);
+      --pdf:#FDEDEC; --pdf-ink:#A13A32; --png:#E9F1FC; --png-ink:#1F5596; --jpg:#FDF3E2; --jpg-ink:#87570C;
+      --err:#FDEDEC; --err-ink:#A13A32;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#1E2321; --surface:#272D2A; --line:#333B37;
+        --ink:#EEF3F0; --ink2:#B5C1BB; --ink3:#7D8A84; --link:#7FD0A8;
+        --mint:#1F3A2D; --mint-ink:#9FDDBF; --chip:rgba(0,0,0,.25);
+        --pdf:#3A2422; --pdf-ink:#F2A49C; --png:#1E2C3D; --png-ink:#9CC3F2; --jpg:#3A2F1C; --jpg-ink:#F0C67E;
+        --err:#3A2422; --err-ink:#F2A49C;
+      }
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { width:320px; background:var(--bg); color:var(--ink); font:13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    button { font:inherit; color:inherit; background:none; border:none; cursor:pointer; }
+    button:focus-visible { outline:2px solid var(--green); outline-offset:2px; }
+    [hidden] { display:none !important; }
+
+    .hero { position:relative; background:var(--mint); padding:16px 16px 14px; overflow:hidden; min-height:96px; }
+    .greet { position:relative; z-index:1; font-size:18px; font-weight:800; letter-spacing:-.3px; color:var(--mint-ink); max-width:200px; }
+    .sub { position:relative; z-index:1; font-size:12px; color:var(--mint-ink); opacity:.85; margin-top:3px; max-width:190px; line-height:1.4; }
+    .chip { position:relative; z-index:1; display:inline-block; margin-top:9px; font-size:11px; font-weight:700; color:var(--mint-ink); background:var(--chip); border-radius:999px; padding:3px 9px; }
+    .pal { position:absolute; right:12px; top:12px; width:78px; height:78px; }
+    .pal.pop { animation:pop .7s ease-out; }
+    .pal.wiggle { animation:wiggle 1.2s ease-in-out infinite; }
+    @keyframes pop { 0%{transform:translateY(0)} 35%{transform:translateY(-10px) rotate(-4deg)} 70%{transform:translateY(2px)} 100%{transform:translateY(0)} }
+    @keyframes wiggle { 0%,100%{transform:rotate(0)} 50%{transform:rotate(3deg)} }
+    .confetti { position:absolute; inset:0; pointer-events:none; }
+    .confetti i { position:absolute; top:-10px; width:6px; height:9px; border-radius:2px; animation:fall 2.2s ease-in forwards; }
+    @keyframes fall { to { transform:translateY(130px) rotate(340deg); opacity:0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .confetti { display:none; }
+      .pal.pop, .pal.wiggle { animation:none; }
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .body { padding:12px 14px; display:flex; flex-direction:column; gap:12px; }
+    .lbl { font-size:11px; font-weight:700; color:var(--ink3); margin-bottom:6px; }
+    .seg { display:flex; background:var(--surface); border-radius:10px; padding:3px; }
+    .seg button { flex:1; padding:6px 0; border-radius:8px; font-weight:700; font-size:12px; color:var(--ink3); }
+    .seg button[aria-pressed="true"] { background:var(--bg); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,.08); }
+    .fmts { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .fmt { text-align:left; border-radius:12px; padding:9px 9px 8px; border:2px solid transparent; }
+    .fmt b { display:block; font-size:13px; }
+    .fmt span { font-size:10.5px; opacity:.85; }
+    .f-pdf { background:var(--pdf); color:var(--pdf-ink); }
+    .f-png { background:var(--png); color:var(--png-ink); }
+    .f-jpg { background:var(--jpg); color:var(--jpg-ink); }
+    .fmt[aria-pressed="true"] { border-color:currentColor; }
+    .row { display:flex; justify-content:space-between; align-items:center; }
+    .row .lbl { margin:0; }
+    .pills { display:flex; gap:4px; }
+    .pill { padding:4px 10px; border-radius:999px; font-size:11px; font-weight:700; color:var(--ink3); border:1.5px solid var(--line); }
+    .pill[aria-pressed="true"] { background:var(--mint); border-color:var(--green); color:var(--mint-ink); }
+    .row.off { opacity:.4; }
+    .row.off .pill { cursor:not-allowed; }
 
-    body {
-      width: 300px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 13px;
-    }
+    .btn { width:100%; background:var(--green); color:#fff; border-radius:12px; padding:12px; font-weight:800; font-size:14px; }
+    .btn:hover { background:var(--green-d); }
+    .btn:disabled { opacity:.6; cursor:wait; }
+    .ghost { display:block; width:100%; text-align:center; font-size:12px; font-weight:700; color:var(--link); margin-top:7px; padding:2px; }
+    .ghost.quiet { color:var(--ink3); }
 
-    /* ── Header ── */
-    header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 14px 16px 12px;
-      border-bottom: 1px solid var(--border);
-    }
+    .prog { height:6px; background:var(--surface); border-radius:6px; overflow:hidden; }
+    .prog i { display:block; height:100%; width:0; background:var(--green); border-radius:6px; transition:width .3s ease; }
+    .plabel { font-size:12px; color:var(--ink2); text-align:center; margin-top:7px; }
+    .note { background:var(--surface); color:var(--ink2); border-radius:12px; padding:10px 12px; font-size:12px; line-height:1.45; }
+    .note b { display:block; color:var(--ink); font-size:13px; margin-bottom:2px; }
+    .note.good { background:var(--mint); color:var(--mint-ink); }
+    .note.good b { color:var(--mint-ink); }
+    .note.bad { background:var(--err); color:var(--err-ink); }
+    .note.bad b { color:var(--err-ink); }
+    .fname { word-break:break-all; }
 
-    .logo {
-      width: 34px; height: 34px; border-radius: 8px;
-      background: var(--green-light);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .brand-name { font-size: 14px; font-weight: 700; color: var(--text); }
-    .brand-sub  { font-size: 11px; color: var(--text3); margin-top: 1px; }
-
-    /* ── Options ── */
-    .options {
-      padding: 14px 16px;
-      display: flex; flex-direction: column; gap: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .option-row {
-      display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .option-label {
-      font-size: 12px; font-weight: 600; color: var(--text2);
-    }
-
-    .option-sub {
-      font-size: 11px; color: var(--text3); margin-top: 1px;
-    }
-
-    .pill-group { display: flex; gap: 5px; }
-
-    .pill {
-      padding: 4px 11px; border-radius: 12px;
-      font-size: 11px; font-weight: 600;
-      border: 1.5px solid var(--border);
-      color: var(--text3); background: transparent;
-      cursor: pointer; transition: all 0.12s;
-    }
-    .pill:hover { border-color: var(--green); color: var(--green); }
-    .pill.active {
-      background: var(--green-light);
-      border-color: var(--green);
-      color: var(--green-text);
-    }
-
-    /* ── Capture button ── */
-    .capture-wrap { padding: 14px 16px; }
-
-    #captureBtn {
-      width: 100%; padding: 11px;
-      background: var(--green); color: #fff;
-      border: none; border-radius: 8px;
-      font-size: 13px; font-weight: 700;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: background 0.15s;
-    }
-    #captureBtn:hover    { background: #237A52; }
-    #captureBtn:disabled { background: #A8D5BF; cursor: not-allowed; }
-    #captureBtn svg { width: 15px; height: 15px; flex-shrink: 0; }
-
-    /* ── Progress ── */
-    .progress-wrap {
-      margin-top: 10px; display: none; flex-direction: column; gap: 6px;
-    }
-    .progress-wrap.visible { display: flex; }
-
-    .progress-bg {
-      height: 3px; background: var(--border); border-radius: 3px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; background: var(--green); border-radius: 3px;
-      transition: width 0.3s ease; width: 0%;
-    }
-
-    #progressLabel {
-      font-size: 11px; color: var(--text3); text-align: center;
-    }
-
-    /* ── Status ── */
-    #status {
-      font-size: 11px; text-align: center;
-      min-height: 16px; color: var(--text3);
-      margin-top: 8px;
-    }
-    #status.success { color: var(--green); font-weight: 600; }
-    #status.error   { color: var(--red);   font-weight: 600; }
+    .recent { border-top:1px solid var(--line); padding-top:10px; }
+    .item { display:flex; align-items:center; gap:9px; padding:5px 0; }
+    .tag { font-size:9.5px; font-weight:800; border-radius:6px; padding:3px 5px; min-width:36px; text-align:center; }
+    .name { flex:1; font-size:12px; color:var(--ink2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .show { font-size:11px; font-weight:700; color:var(--link); }
+    .gone { font-size:11px; color:var(--ink3); }
+    .empty { font-size:12px; color:var(--ink3); }
+    .hint { font-size:11px; color:var(--ink3); text-align:center; padding:2px 0 4px; }
+    kbd { font:inherit; font-weight:700; background:var(--surface); border:1px solid var(--line); border-radius:5px; padding:0 4px; color:var(--ink2); }
   </style>
 </head>
 <body>
-
-  <header>
-    <div class="logo">
-      <svg width="22" height="22" viewBox="0 0 52 52" fill="none" stroke="#2E9E6B" stroke-width="5" stroke-linecap="round">
-        <path d="M8 18V10h8"/>
-        <path d="M36 10h8v8"/>
-        <path d="M44 34v8h-8"/>
-        <path d="M16 44H8v-8"/>
-        <circle cx="26" cy="26" r="8" fill="#2E9E6B" stroke="none"/>
-      </svg>
-    </div>
-    <div>
-      <div class="brand-name">PagePocket</div>
-      <div class="brand-sub">Capture &amp; save any page</div>
-    </div>
+  <header class="hero" id="hero">
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+    <div class="greet" id="greet">Hello!</div>
+    <div class="sub" id="sub">Ready to pocket something?</div>
+    <div class="chip" id="chip">0 pages pocketed</div>
+    <div id="palWrap" aria-hidden="true"></div>
   </header>
 
-  <div class="options">
-    <div class="option-row">
-      <div>
-        <div class="option-label">Format</div>
+  <main class="body">
+    <!-- Ready -->
+    <section id="readyView">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <div class="lbl" id="modeLbl">What to pocket</div>
+          <div class="seg" role="group" aria-labelledby="modeLbl" id="modeGroup">
+            <button data-value="full">Full page</button>
+            <button data-value="visible">Visible area</button>
+          </div>
+        </div>
+        <div>
+          <div class="lbl" id="fmtLbl">Save as</div>
+          <div class="fmts" role="group" aria-labelledby="fmtLbl" id="formatGroup">
+            <button class="fmt f-pdf" data-value="pdf"><b>PDF</b><span>To share or print</span></button>
+            <button class="fmt f-png" data-value="png"><b>PNG</b><span>Sharpest image</span></button>
+            <button class="fmt f-jpg" data-value="jpeg"><b>JPEG</b><span>Smaller file</span></button>
+          </div>
+        </div>
+        <div class="row" id="methodRow">
+          <div class="lbl" id="methodLbl">Method</div>
+          <div class="pills" role="group" aria-labelledby="methodLbl" id="methodGroup">
+            <button class="pill" data-value="dom" title="Redraws the page. Fast, but some sites look odd.">Quick render</button>
+            <button class="pill" data-value="scroll" title="Scrolls and screenshots. Most accurate.">Scroll &amp; stitch</button>
+          </div>
+        </div>
+        <div class="row" id="qualityRow">
+          <div class="lbl" id="qualityLbl">Quality</div>
+          <div class="pills" role="group" aria-labelledby="qualityLbl" id="qualityGroup">
+            <button class="pill" data-value="0.6">Low</button>
+            <button class="pill" data-value="0.85">Med</button>
+            <button class="pill" data-value="0.95">High</button>
+          </div>
+        </div>
+        <div>
+          <button class="btn" id="pocketBtn">Pocket this page</button>
+          <button class="ghost" id="copyBtn">Copy to clipboard instead</button>
+        </div>
       </div>
-      <div class="pill-group" id="formatGroup">
-        <button class="pill active" data-value="pdf">PDF</button>
-        <button class="pill" data-value="png">PNG</button>
-        <button class="pill" data-value="jpeg">JPEG</button>
-      </div>
-    </div>
+    </section>
 
-    <div class="option-row">
-      <div>
-        <div class="option-label">Method</div>
-        <div class="option-sub" id="methodHint">Scroll &amp; stitch</div>
+    <!-- Capturing -->
+    <section id="busyView" hidden>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="progWrap"><i id="progBar"></i></div>
+          <div class="plabel" id="progLabel" aria-live="polite">Getting ready...</div>
+        </div>
+        <div class="note" id="busyNote"><b>You can close this popup</b>I'll keep going in the background. Just stay on this tab.</div>
+        <button class="ghost quiet" id="cancelBtn">Cancel</button>
       </div>
-      <div class="pill-group" id="methodGroup">
-        <button class="pill" data-value="dom" data-hint="DOM render">DOM</button>
-        <button class="pill active" data-value="scroll" data-hint="Scroll &amp; stitch">Scroll</button>
+    </section>
+
+    <!-- Done -->
+    <section id="doneView" hidden>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="note good" id="doneNote" aria-live="polite"></div>
+        <button class="btn" id="againBtn">Pocket another page</button>
       </div>
-    </div>
+    </section>
 
-    <div class="option-row">
-      <div>
-        <div class="option-label">Quality</div>
-        <div class="option-sub" id="qualityHint">Affects file size</div>
+    <!-- Error -->
+    <section id="errorView" hidden>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="note bad" id="errorNote" role="alert"></div>
+        <button class="btn" id="retryBtn">Try again</button>
       </div>
-      <div class="pill-group" id="qualityGroup">
-        <button class="pill" data-value="0.6">Low</button>
-        <button class="pill active" data-value="0.85">Med</button>
-        <button class="pill" data-value="0.95">High</button>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="capture-wrap">
-    <button id="captureBtn">
-      <svg viewBox="0 0 52 52" fill="none" stroke="white" stroke-width="5" stroke-linecap="round">
-        <path d="M8 18V10h8"/>
-        <path d="M36 10h8v8"/>
-        <path d="M44 34v8h-8"/>
-        <path d="M16 44H8v-8"/>
-        <circle cx="26" cy="26" r="8" fill="white" stroke="none"/>
-      </svg>
-      Save Page
-    </button>
+    <section class="recent" id="recentView">
+      <div class="lbl">Recent pockets</div>
+      <div id="recentList"></div>
+    </section>
 
-    <div class="progress-wrap" id="progressWrap">
-      <div class="progress-bg">
-        <div class="progress-fill" id="progressBar"></div>
-      </div>
-      <div id="progressLabel">Starting…</div>
-    </div>
+    <div class="hint" id="hint"></div>
+  </main>
 
-    <div id="status"></div>
-  </div>
-
+  <script src="shared.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
