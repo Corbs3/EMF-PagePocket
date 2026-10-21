@@ -1,79 +1,64 @@
 # PagePocket
 
-A Chrome extension that captures any full web page and saves it as a PDF, PNG, or JPEG in one click.
+A cheerful Chrome extension that saves any web page as a **PDF, PNG or JPEG** in one click, or copies it to your clipboard. Meet **Pocket pal**, who keeps you company while it works.
+
+![PagePocket](store-screenshot.png)
 
 ## Features
 
-- **Three output formats** - PDF, PNG, or JPEG
-- **Two capture methods:**
-  - **Scroll & stitch** - scrolls the page and stitches screenshots together (default, works on most sites)
-  - **DOM render** - uses html2canvas to render the full page DOM directly (better for complex layouts)
-- **Three quality settings** - Low, Medium, High (affects file size for JPEG and PDF)
-- **Live progress bar** - shows capture and save progress step by step
-- **Auto-named files** - saved as `page-title_YYYY-MM-DD.pdf` (or `.png` / `.jpg`)
-- **Multi-page PDF** - long pages are split across A4 pages automatically
+- **Full page** or **visible area** capture
+- **PDF, PNG or JPEG**, with Low, Med or High quality
+- **Copy to clipboard** for quick pasting into chat or docs
+- **Two methods**
+  - **Scroll & stitch**: scrolls and screenshots the real page. Most accurate.
+  - **Quick render**: redraws the page with html2canvas. Faster, but some sites look odd.
+- **Keeps going if you close the popup**: capture runs in the background
+- **Tab lock**: pauses if you switch tabs and resumes when you come back
+- **Sticky headers and cookie banners** appear once, not in every section
+- **Lazy images** are loaded before capture
+- **Very long pages** are split into parts instead of failing
+- **Smart PDF page breaks** that avoid cutting through text where possible
+- **Right-click menu** and **keyboard shortcut** (Cmd+Shift+S on Mac, Ctrl+Shift+S elsewhere)
+- **Recent pockets** with "Show in folder", a **pocket counter** and milestone badges
+- **Dark mode** and **reduce motion** support
 
-## Installation (Developer Mode)
+## Install (unpacked)
 
 1. Download or clone this repository
-2. Open Chrome and go to `chrome://extensions`
-3. Enable **Developer mode** (top right toggle)
-4. Click **Load unpacked**
-5. Select the `pagepocket` folder
+2. Go to `chrome://extensions`
+3. Turn on **Developer mode**
+4. Click **Load unpacked** and select this folder
 
-## How It Works
-
-### Scroll & stitch (default)
-1. Measures the full page height and viewport size
-2. Scrolls through the page in viewport-sized steps
-3. Takes a screenshot at each position using the Chrome `captureVisibleTab` API
-4. Stitches all screenshots onto a single canvas
-5. Exports the canvas to the chosen format
-
-### DOM render
-1. Injects html2canvas into the page
-2. Renders the full page DOM to a canvas in one pass
-3. Exports the canvas to the chosen format
-
-## When to use which method
-
-| Method | Best for |
-|---|---|
-| Scroll & stitch | Most sites - accurate colours, handles images and media |
-| DOM render | Sites where scroll & stitch produces gaps or misalignment |
+The keyboard shortcut can be changed at `chrome://extensions/shortcuts`.
 
 ## Permissions
 
-| Permission | Reason |
+| Permission | Why |
 |---|---|
-| `activeTab` | Access the current tab to capture it |
-| `scripting` | Inject capture libraries into the page |
-| `downloads` | Save the output file to your downloads folder |
-| `tabs` | Read tab info and capture visible tab screenshots |
-| `host_permissions: <all_urls>` | Required to inject scripts and capture on any site |
+| `activeTab` | Access to the current tab only when you use PagePocket |
+| `scripting` | Scrolls the page, hides repeating sticky bars, runs Quick render |
+| `downloads` | Saves files and opens them with "Show" |
+| `storage` | Settings, counter and recent pockets, stored locally |
+| `contextMenus` | "Pocket this page" in the right-click menu |
+| `offscreen` | Hidden page that stitches screenshots and builds files |
 
-## Third-Party Libraries
+No host permissions are requested, and nothing is sent anywhere.
 
-| Library | Version | Licence |
-|---|---|---|
-| [html2canvas](https://html2canvas.hertzen.com) | 1.4.1 | MIT |
-| [jsPDF](https://github.com/parallax/jsPDF) | 2.5.1 | MIT |
-
-Both libraries are bundled locally and run entirely within your browser. No data is sent anywhere.
-
-## File Structure
+## File structure
 
 ```
 pagepocket/
-  manifest.json         Extension config and permissions
-  popup.html            Extension popup UI and styles
-  popup.js              Capture logic - scroll/stitch, DOM render, PDF export
+  manifest.json       Extension config and permissions
+  background.js       Runs captures, so they survive the popup closing
+  offscreen.html/js   Stitches screenshots and builds PDF, PNG or JPEG files
+  popup.html/js       The popup and Pocket pal
+  shared.js           Defaults and milestones used by popup and background
   lib/
-    html2canvas.min.js  DOM-to-canvas rendering library (MIT)
-    jspdf.umd.min.js    PDF generation library (MIT)
-  icons/                Extension icons (16px, 48px, 128px)
+    html2canvas.min.js  DOM-to-canvas library (MIT)
+    jspdf.umd.min.js    PDF library (MIT)
+  icons/              16, 32, 48 and 128px icons
 ```
 
 ## Licence
 
-MIT (extension code only - bundled libraries retain their own MIT licences)
+MIT (extension code only; bundled libraries keep their own MIT licences)
