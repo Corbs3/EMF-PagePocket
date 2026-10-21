@@ -1,36 +1,41 @@
-# Privacy Policy — PagePocket
+# Privacy Policy: PagePocket
 
-**Last updated: April 2026**
+**Last updated: October 2026**
 
 ## Overview
 
-PagePocket is a Chrome extension that captures web pages and saves them as PDF, PNG, or JPEG files. This policy explains how the extension handles your data.
+PagePocket is a Chrome extension that saves web pages as PDF, PNG or JPEG files, or copies them to your clipboard. This policy explains how it handles your data.
 
-## Data Collected
+## Data collected
 
-PagePocket does not collect, store, or transmit any personal data.
+**PagePocket does not collect, send or share any personal data.** Nothing ever leaves your device.
 
-The extension captures the visible content of the current tab and saves it directly to your downloads folder. No page content, screenshots, or files are stored by the extension or sent anywhere.
+When you pocket a page, the extension takes screenshots of the current tab (or redraws it), builds the file in your browser and saves it to your Downloads folder. Page content and screenshots are never stored by the extension or sent anywhere.
 
-## Data Storage
+## Data stored on your device
 
-PagePocket does not use any browser storage APIs. No data persists between sessions.
+PagePocket keeps a small amount of information in Chrome's local extension storage, on your device only:
 
-## Data Sharing
+- **Your settings**: capture mode, file format, method and quality
+- **Your pocket counter**: how many pages you have saved, used for fun milestone badges
+- **Recent pockets**: the file names, formats and Chrome download IDs of your last 5 saves, so you can open them with "Show"
 
-No data is collected, transmitted, or shared with any external server, service, or third party.
+This information is never sent anywhere. You can clear it at any time by removing the extension.
 
-All processing happens locally in your browser using bundled open-source libraries (html2canvas and jsPDF).
+## Data sharing
+
+No data is collected, transmitted or shared with any server, service or third party. All processing happens locally using bundled open-source libraries (html2canvas and jsPDF).
 
 ## Permissions
 
-- **activeTab** - grants temporary access to the current tab when you click the capture button
-- **scripting** - used to inject the html2canvas library into the page to render its content
-- **downloads** - used to save the output file to your downloads folder
-- **tabs** - used to read tab information and take screenshots during scroll & stitch capture
-- **host_permissions (`<all_urls>`)** - required to inject scripts and capture pages on any site
+- **activeTab**: temporary access to the current tab, only when you click PagePocket, use the right-click menu or the keyboard shortcut
+- **scripting**: scrolls the page during capture, hides repeating sticky headers, and runs the Quick render library
+- **downloads**: saves the file to your Downloads folder and opens it with "Show"
+- **storage**: keeps your settings, counter and recent pockets on your device
+- **contextMenus**: adds "Pocket this page" to the right-click menu
+- **offscreen**: a hidden extension page that stitches screenshots together and builds the file, so capture keeps going if you close the popup
 
-## Changes to This Policy
+## Changes to this policy
 
 This policy may be updated occasionally. The latest version will always be available at this URL.
 
